@@ -1,0 +1,304 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="clarity-ui.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="prism.css">
+    <base href="/">
+    <style>
+        .main-container nav.subnav {
+            flex: 0 0 50px;
+            padding: 0px 48px;
+            flex-direction: column;
+        }
+
+        .subnav input {
+            margin: 14px 12px;
+            width: 50%;
+            min-width: 240px;
+            max-width: 480px;
+        }
+
+        .search.btn {
+            background-color: rgba(33, 150, 243, .7);
+            transition: all .5s ease;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .search.btn:not([disabled]):hover {
+            background-color: rgba(33, 150, 243, .85);
+            color: #fff;
+        }
+
+        .search.btn:not([disabled]):focus,
+        .search.btn:not([disabled]):active {
+            background-color: rgba(33, 150, 243, 1);
+            color: #fff;
+        }
+
+        pre {
+            border: 1px solid #ccc;
+            max-height: 100%;
+            border-radius: 3px;
+            overflow: auto;
+            margin: 0px;
+            border-radius: 0px;
+            min-height: 100%;
+        }
+
+        span.token.punctuation.active,
+        span.token.tag.active,
+        [tag-highlight].active {
+            background: rgba(255, 235, 59, 1);
+            color: #333;
+        }
+
+        .count {
+            width: 120px;
+        }
+
+        .logo-txt {
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .high {
+            background: rgba(255, 235, 59, 1);
+            color: #333;
+        }
+        /* $green: #008744;
+        $blue: #0057e7;
+        $red: #d62d20;
+        $yellow: #ffa700;
+        $white: #eee;
+        $width: 100px; */
+
+        .showbox {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 5%;
+        }
+
+        .masker {
+            background-color: rgba(0, 0, 0, .2);
+            display: none;
+        }
+
+        .masker,
+        .loader {
+            position: absolute;
+            left: 4px;
+            right: 4px;
+            top: 4px;
+            bottom: 4px;
+            margin: auto;
+            color: #fff;
+        }
+
+        .content-area {
+            position: relative;
+        }
+
+        .scaler {
+            width: 56px;
+            height: 56px;
+            border: 4px solid transparent;
+            border-radius: 50%;
+            position: relative;
+            top: 50%;
+            margin: -28px auto 0;
+        }
+
+        .scaler::before {
+            content: '';
+            border: 4px solid rgba(0, 82, 236, 0.5);
+            border-radius: 50%;
+            width: 67.2px;
+            height: 67.2px;
+            position: absolute;
+            top: -9.6px;
+            left: -9.6px;
+            animation: loader-scale 1s ease-out infinite;
+            animation-delay: 1s;
+            opacity: 0;
+        }
+
+        .scaler::after {
+            content: '';
+            border: 4px solid #0052ec;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            animation: loader-scale 1s ease-out infinite;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes loader-scale {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+
+        #alertBox {
+            display: none;
+        }
+
+        .close-alert {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+        }
+
+        .close:focus {
+            box-shadow: none;
+        }
+    </style>
+    <style custom-styles>
+
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <div id="alertBox" class="alert alert-app-level alert-danger">
+            <button type="button" class="close" aria-label="Close">
+                <span class="fa fa-close close-alert"></span>
+            </button>
+            <div class="alert-item">
+                <div class="alert-text msg">
+                    Alert Type: Danger
+                </div>
+            </div>
+        </div>
+        <header class="header header-6">
+            <div class="branding">
+                <a href="javascript:void(0)" class="title">
+                    <span class="logo-txt">
+                        <span class="high"><span><</span><span>Tag Parser</span></span><span>></span>
+                    </span>
+                </a>
+            </div>
+        </header>
+        <nav class="subnav">
+            <div class="form-group">
+                <label for="aForm_1">Webpage URL</label>
+                <label for="validInput1" aria-haspopup="true" role="tooltip" class="tooltip tooltip-validation tooltip-sm">
+                    <input id="srchWeb" type="text" name="srch" placeholder="http://www.blabla.com" value="http://">
+                    <button type="button" class="search btn btn-link btn-primary" disabled="true">
+                    <i class="fa fa-search" aria-hidden="true"></i>                        
+                    </button>
+                </label>
+            </div>
+        </nav>
+        <div class="content-container">
+            <!-- Code block: OccuranceCount Start -->
+
+            <!-- <div class="count">Occurances<br>(closing tags ignored): <span>-</span></div> -->
+
+            <!-- Code block: OccuranceCount End -->
+            <div class="content-area">
+                <div class="masker">
+                    <div class="loader scaler"></div>
+                </div>
+                <pre></pre>
+            </div>
+        </div>
+    </div>
+    <script src="http://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify.js"></script>
+    <script src="prism.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify-css.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify-html.js"></script>
+    <script>
+        var d$ = jQuery.noConflict();
+        var urlPattern = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+        var devUrl = /^(http:|https:)(\/\/)(localhost|[0-9]{1,3}\.{1}[0-9]{1,3}\.{1}[0-9]{1,3}\.{1}[0-9]{1,3}):([0-9]{1,4})$/;
+        function processResponse() {
+            d$('button.search').prop('disabled', true);
+            d$('#srchWeb').prop('disabled', true);
+            d$('#alertBox').hide();
+            var webAddr = d$('#srchWeb').val();
+            d$('.masker').show();
+            if ((webAddr.indexOf('http://') === 0 && webAddr.length === 7)
+                || (webAddr.indexOf('http://') === 0 && webAddr.length === 8)) {
+                d$('#srchWeb').val(window.location.href);
+                webAddr = window.location.href;
+
+            } else if (webAddr.indexOf('http') !== 0) {
+                webAddr = 'http://' + webAddr;
+            }
+            d$.get(webAddr, function () {
+
+            }).done(function (data) {
+                d$('pre').html(Prism.highlight(html_beautify(data, { indent_size: 2 }), Prism.languages.html));
+                d$("pre span.token.tag span.token.tag").each(function () {
+                    d$(this).attr('tag-highlight', this.innerText.replace('<', '').replace('/', ''));
+                });
+            }).error(function (data) {
+                d$('#alertBox .msg').text('Error occurred while retrieving source');
+                d$('#alertBox').show();
+            }).always(function (data, textstatus, request) {
+                d$('style[custom-styles]').empty();
+                d$('.masker').hide();
+                d$('button.search').removeAttr('disabled');
+                d$('#srchWeb').removeAttr('disabled');
+            });
+        }
+        d$(document).ready(function () {
+            d$('.close').click(function () {
+                d$('#alertBox').hide();
+            });
+            d$('button.search').click(function (e) {
+                processResponse();
+            });
+            d$('body').on('click', '[tag-highlight]', function () {
+                d$('[tag-highlight]').removeClass('active');
+                d$('style[custom-styles]').text('[tag-highlight=' + d$(this).attr('tag-highlight') + ']{background: rgba(255, 235, 59, 1);color: #333;}')
+                // Code block: OccuranceCount Start
+                // var count = 0;
+                // Code block: OccuranceCount End
+                d$('[tag-highlight=' + d$(this).attr('tag-highlight') + ']').each(function () {
+                    // Code block: OccuranceCount Start
+                    /* if (this.innerText.indexOf('/') === -1) {
+                        count++;
+                    } */
+                    // Code block: OccuranceCount End
+                    d$(this).toggleClass('active');
+                });
+                // Code block: OccuranceCount Start
+                // d$('.count span').html(count);
+                // Code block: OccuranceCount End
+            });
+            d$('#srchWeb').keyup(function (event) {
+                if (urlPattern.test(d$(this).val())
+                    || devUrl.test(d$(this).val())) {
+                    d$('button.search').removeAttr('disabled');
+                    event.keyCode == 13 ? processResponse() : void(0);
+                } else {
+                    d$('button.search').attr('disabled', true);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

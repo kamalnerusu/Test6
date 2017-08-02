@@ -1,0 +1,15 @@
+{
+  "name": "tag-parser",
+  "version": "1.0.0",
+  "description": "Used to highlight all the occurences of selected tag in HTML",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.3"
+  }
+}
